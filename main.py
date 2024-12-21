@@ -1,4 +1,7 @@
-a = 12 
-b = 12 
+from fastapi import FastAPI
 
-sum = a+b 
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
