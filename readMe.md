@@ -5,4 +5,7 @@
 
 ### Progress
 
+- Virtual Environment 
+- How to take inputs in the body from Postman ?
+
 
