@@ -14,9 +14,10 @@ Create a list of 5 animals called zoo
 """
 
 animals = ["Zebra" , "Dog" , "Lion" , "Cow" , "Cat"]
+print(f"The original list -> {animals}")
 print(f"The animal at the third index is {animals[3]}")
-del animals[3]
-print(f"The updated list -> {animals}")
+animals.pop(3)
+print(f"The updated list without third index-> {animals}")
 animals.append("Penguin")
 print(f"The new list post appending {animals}")
 del animals[0]
