@@ -16,6 +16,7 @@ enemy1.walk_forward()
 enemy2.walk_forward()
 
 enemy1.attack()
+
 enemy2.attack()
 
 enemy1.talk()
