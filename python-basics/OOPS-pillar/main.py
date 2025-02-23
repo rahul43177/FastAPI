@@ -13,6 +13,8 @@ print(f"{enemy1.type_of_enemy} has {enemy1.health_point} health points and {enem
 print(f"{enemy2.type_of_enemy} has {enemy2.health_point} health points and {enemy2.attack_damage} attack damage")
 
 enemy1.walk_forward()
+
+
 enemy2.walk_forward()
 enemy1.attack()
 enemy2.attack()
@@ -21,3 +23,6 @@ enemy1.talk()
 enemy2.talk()
 
     
+
+
+
