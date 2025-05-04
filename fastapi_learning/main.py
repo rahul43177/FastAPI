@@ -1,9 +1,8 @@
-from fastapi import FastAPI , Body
-from pydantic import BaseModel, field_validator
+from fastapi import FastAPI
+from pydantic import BaseModel , field_validator
+app = FastAPI()
 
-app  = FastAPI()
-
-BOOKS = [
+BOOKS_DATABASE = [
     {
         "id": 1,
         "title": "Mathematics",
@@ -82,70 +81,111 @@ BOOKS = [
         "genre": "Academic"
     }
 ]
-        
-class AddBookClass(BaseModel):
+
+
+CARS_DATABASE = [
+    {
+        "id": 1,
+        "make": "Toyota",
+        "model": "Camry",
+        "year": 2022,
+        "color": "Silver",
+        "price": 25000
+    },
+    {
+        "id": 2,
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2023,
+        "color": "Blue",
+        "price": 22000
+    },
+    {
+        "id": 3,
+        "make": "Tesla",
+        "model": "Model 3",
+        "year": 2023,
+        "color": "White",
+        "price": 45000
+    },
+    {
+        "id": 4,
+        "make": "Ford",
+        "model": "Mustang",
+        "year": 2022,
+        "color": "Red",
+        "price": 35000
+    },
+    {
+        "id": 5,
+        "make": "BMW",
+        "model": "X5",
+        "year": 2023,
+        "color": "Black",
+        "price": 65000
+    }
+]
+
+
+@app.get("/getallbooks")
+def get_all_books():
+    return BOOKS_DATABASE
+
+# add a new book to database 
+class AddBook(BaseModel):
     id : int 
     title : str 
     author : str 
     year : int 
-    genre : str 
-
-    @field_validator("year")
-    def year_validation(cls, v):
-        if not isinstance(v, int):
-            raise ValueError("Year must be an integer, not a string")
-        if v < 0:
-            raise ValueError("Year must be greater than 0")
-        return v
-        
-    
-    
-@app.post("/addbook")
-async def add_book_database(single_book_data : AddBookClass):
-    print("Body" , single_book_data)
-    print(f"The type of book is : {type(single_book_data)}")
-    BOOKS.append(single_book_data)
-    return {
-        "message" : "The book data added successfully" ,  
-        "updated book data" : BOOKS
-    } 
-
-class BookId(BaseModel):
-    id : int
+    genre : str
 
     @field_validator("id")
-    def id_validator(cls , v):
-        if v < 0 :
-            raise ValueError("Id can't be negative")
+    def validate_id(cls , v) :
+        if v < 0:
+            return {"message" : "THe id can't be negative"}
+        if isinstance(v , str):
+            return {"mssage" : "The id can't be a string"}
         return v 
+        
 
-
-# @app.post("/fetchbook")
-# async def fetch_book_by_id(book_id: BookId):
-#     book_to_return = []
-#     for book in BOOKS:
-#         if book.get("id") == book_id.id:
-#             book_to_return.append(book)
-#     if not book_to_return:
-#         return {
-#             "message": "No book found with the given ID"
-#         }
-#     return {
-#         "book": book_to_return
-#     }
-
-@app.post("/fetchbook")
-async def fetch_book_by_id(book_id : BookId):
-    book_to_return = []
-    for book in BOOKS:
-        if book.get("id") == book_id.id:
-            book_to_return.append(book)
-    if not book_to_return:
-        return {
-            "message" : "No book fount with the given ID"
-        }
+@app.post("/addbook")
+def add_new_book(single_book : AddBook):
+    BOOKS_DATABASE.append(single_book)
     return {
-        "book" : book_to_return
+        "message" : "The data has been added" , 
+        "book data" : BOOKS_DATABASE
+    }
+    
+
+#i want a add car to database API
+class AddCar(BaseModel):
+    id : int 
+    make : str 
+    model : str 
+    year : int 
+    color : str 
+    price : int 
+
+@app.post("/addcar")
+def add_new_car(single_car : AddCar):
+    CARS_DATABASE.append(single_car)
+    return {
+        "message" : "The data has been added" , 
+        "car data" : CARS_DATABASE
     }
 
 
+#i want a get all cars from database API
+@app.get("/getallcars")
+def get_all_cars():
+    return CARS_DATABASE
+
+
+#i want a get a single car from database API
+@app.get("/getcar/{car_id}")
+def get_single_car(car_id : int):
+    for car in CARS_DATABASE:
+        if car["id"] == car_id:
+            return car
+    return {"message" : "The car is not found"} 
+        
