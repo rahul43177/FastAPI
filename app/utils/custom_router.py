@@ -2,7 +2,8 @@ from enum import Enum
 
 from fastapi import APIRouter
 from typing import Callable, Any
-from fastapi_class import views as cbv
+from fastapi_utils.cbv import cbv
+
 
 class CustomRouter(APIRouter):
     def get_route(self, path : str , * ,  include_in_schema : bool = True , **kwargs : Any ) -> Callable:
